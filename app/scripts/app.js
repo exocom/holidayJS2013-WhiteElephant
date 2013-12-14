@@ -4,7 +4,8 @@ angular.module('holidayJs2013WhiteElephantApp', [
   'ngCookies',
   'ngResource',
   'ngSanitize',
-  'ngRoute'
+  'ngRoute',
+  'firebase'
 ])
   .config(['$routeProvider', function ($routeProvider) {
     $routeProvider
