@@ -12,6 +12,10 @@ angular.module('holidayJs2013WhiteElephantApp', [
         templateUrl: 'views/main.html',
         controller: 'MainCtrl'
       })
+      .when('/game-room', {
+        templateUrl: 'views/game-room.html',
+        controller: 'GameRoomCtrl'
+      })
       .otherwise({
         redirectTo: '/'
       });
