@@ -22,7 +22,7 @@
 			<div class="col-xs-2 spacing-top">
                 <img src="../images/profile.png" class="img-circle img-responsive user active-user">
                 <div class="present">
-                    <img src="../images/present.png" class="present-picked">
+                    <img ng-if="user.present.id" src="../images/present.png" class="present-picked">
                 </div>
 			</div>
 			<div class="col-xs-6 col-xs-offset-1">
@@ -32,24 +32,39 @@
             </div>
 			<div class="col-xs-2 col-xs-offset-1 spacing-top">
                 <img src="../images/profile.png" class="img-circle img-responsive user inactive-user">
+                <div class="present">
+                    <img ng-if="user.present.id" src="../images/present.png" class="present-picked">
+                </div>
             </div>
 		</div>
 		<div class="row">
             <div class="col-xs-2 spacing-top">
                 <img src="../images/profile.png" class="img-circle img-responsive user inactive-user">
+                <div class="present">
+                    <img ng-if="user.present.id" src="../images/present.png" class="present-picked">
+                </div>
             </div>
 			<div class="col-xs-8"><span class="img-circle"><img src="../images/elephant.png" style="height: 100%; width: 100%"></span></div>
             <div class="col-xs-2 spacing-top">
                 <img src="../images/profile.png" class="img-circle img-responsive user inactive-user">
+                <div class="present">
+                    <img ng-if="user.present.id" src="../images/present.png" class="present-picked">
+                </div>
             </div>
 		</div>
 		<div class="row">
             <div class="col-xs-2">
                 <img src="../images/profile.png" class="img-circle img-responsive user inactive-user">
+                <div class="present">
+                    <img ng-if="user.present.id" src="../images/present.png" class="present-picked">
+                </div>
             </div>
 			<div class="col-xs-8"></div>
             <div class="col-xs-2">
                 <img src="../images/profile.png" class="img-circle img-responsive user inactive-user">
+                <div class="present">
+                    <img ng-if="user.present.id" src="../images/present.png" class="present-picked">
+                </div>
             </div>
 		</div>
 	</div>
