@@ -39,6 +39,10 @@ module.exports = function (grunt) {
         files: ['<%= yeoman.app %>/styles/{,*/}*.{scss,sass}'],
         tasks: ['compass:server', 'autoprefixer']
       },
+			recess: {
+				files: ['<%= yeoman.app %>/styles/{,*/}*.less'],
+				tasks: ['recess:dist']
+			},
       styles: {
         files: ['<%= yeoman.app %>/styles/{,*/}*.css'],
         tasks: ['newer:copy:styles', 'autoprefixer']
@@ -170,6 +174,22 @@ module.exports = function (grunt) {
         }
       }
     },
+		recess: {
+			options: {
+				compile: true
+			},
+			dist: {
+				files: [
+					{
+						expand: true,
+						cwd: '<%= yeoman.app %>/styles',
+						src: '{,*/}*.less',
+						dest: '.tmp/styles/',
+						ext: '.css'
+					}
+				]
+			}
+		},
 
     // Renames files for browser caching purposes
     rev: {
@@ -301,6 +321,7 @@ module.exports = function (grunt) {
     // Run some tasks in parallel to speed up the build process
     concurrent: {
       server: [
+				'recess',
         'compass:server',
         'copy:styles'
       ],
@@ -309,6 +330,7 @@ module.exports = function (grunt) {
         'copy:styles'
       ],
       dist: [
+				'recess',
         'compass:dist',
         'copy:styles',
         'imagemin',

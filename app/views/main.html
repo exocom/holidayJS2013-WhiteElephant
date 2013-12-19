@@ -1,14 +1,29 @@
-<h1>Get Started</h1>
-<div>
-    <form role="form">
-        <div class="form-group">
-            <label for="yourName">Your Name</label>
-            <input type="email" class="form-control" id="yourName" placeholder="Your Name">
-        </div>
-        <div class="form-group">
-            <label for="yourPicture">Your Picture</label>
-            <input type="password" class="form-control" id="yourPicture" placeholder="Your Picture">
-        </div>
-        <button type="submit" class="btn btn-default btn-lg btn-success pull-right">Go</button>
-    </form>
+<div class="jumbotron">
+	<div class="container">
+		<div class="row">
+			<div class="col-xs-9">
+				<h1>White Elephant</h1>
+				<p>Give presents anonymously with up 6 people!  Enjoy the holidays with realtime gift giving!</p>
+				<progress percent="stepsComplete"></progress>
+			</div>
+			<div class="col-xs-3">
+				<img src="/images/elephant.png" class="img-responsive" alt="White Elephant">
+			</div>
+		</div>
+	</div>
+</div>
+<div class="container">
+	<form role="form">
+		<div class="form-group">
+			<label for="yourName">Your Name</label>
+			<input type="email" class="form-control" id="yourName" placeholder="Your Name">
+		</div>
+	</form>
+	<div class="row">
+		<div class="col-xs-3 text-center">Profile Picture</div>
+		<div class="col-xs-6">
+			<ng-camera type="photo" btn-text="'Capture Profile Picture'" enabled="true" width="100%" height="" countdown="3" ng-model="media" capture="callback(media)" capture-message="Go!"></ng-camera>
+		</div>
+		<div class="col-xs-3 text-center">Present Picture</div>
+	</div>
 </div>
