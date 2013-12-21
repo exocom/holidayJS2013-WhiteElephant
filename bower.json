@@ -10,7 +10,8 @@
     "angular-resource": "~1.2.0",
     "angular-cookies": "~1.2.0",
     "angular-sanitize": "~1.2.0",
-    "angular-route": "~1.2.0"
+    "angular-route": "~1.2.0",
+    "angular-camera": "https://github.com/exocom/angular-camera.git#089ea8825b5da0ac3e24895a9c33e1f8f6703193"
   },
   "devDependencies": {
     "angular-mocks": "~1.2.0",
