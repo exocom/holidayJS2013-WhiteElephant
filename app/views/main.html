@@ -4,7 +4,6 @@
 			<div class="col-xs-9">
 				<h1>White Elephant</h1>
 				<p>Give presents anonymously with up 6 people!  Enjoy the holidays with realtime gift giving!</p>
-				<progress percent="stepsComplete"></progress>
 			</div>
 			<div class="col-xs-3">
 				<img src="/images/elephant.png" class="img-responsive" alt="White Elephant">
@@ -13,17 +12,32 @@
 	</div>
 </div>
 <div class="container">
-	<form role="form">
-		<div class="form-group">
-			<label for="yourName">Your Name</label>
-			<input type="email" class="form-control" id="yourName" placeholder="Your Name">
-		</div>
-	</form>
+	<h1 class="text-center">{{signUpSteps[currentStep].description}}</h1>
+	<progress percent="(currentStep / signUpSteps.length) * 100" class="progress-danger progress-striped active"></progress>
 	<div class="row">
-		<div class="col-xs-3 text-center">Profile Picture</div>
-		<div class="col-xs-6">
-			<ng-camera type="photo" btn-text="'Capture Profile Picture'" enabled="true" width="100%" height="" countdown="3" ng-model="media" capture="callback(media)" capture-message="Go!"></ng-camera>
+		<div class="col-xs-3 text-center">
+			<img ng-if="!user.profilePicture" src="/images/profile.png" class="img-responsive" alt="You need a profile picture">
+			<img ng-if="user.profilePicture" ng-src="{{user.profilePicture}}" class="img-responsive" alt="Profile Picture">
+			<p>Your Profile Picture</p>
 		</div>
-		<div class="col-xs-3 text-center">Present Picture</div>
+		<div class="col-xs-6">
+			<div ng-if="currentStep !== 3">
+				<ng-camera type="photo" is-on="camera.status" capture-message="signUpSteps[currentStep].btnText" capture="capturePicture(picture)"></ng-camera>
+			</div>
+			<form name="userForm" ng-if="currentStep === 3">
+				<div class="form-group">
+					<label for="name">User Name</label>
+					<input type="text" id="name" class="form-control" placeholder="Enter Your User Name" ng-model="user.name" required>
+				</div>
+				<div class="text-center">
+					<button type="button" class="btn btn-success" ng-click="createUser()" ng-disabled="userForm.$invalid">{{signUpSteps[currentStep].btnText}}</button>
+				</div>
+			</form>
+		</div>
+		<div class="col-xs-3 text-center">
+			<img ng-if="!user.presentPicture" src="/images/present.png" class="img-responsive" alt="You need a profile picture">
+			<img ng-if="user.presentPicture" ng-src="{{user.presentPicture}}" class="img-responsive" alt="Present Picture">
+			<p>Your Gift</p>
+		</div>
 	</div>
 </div>

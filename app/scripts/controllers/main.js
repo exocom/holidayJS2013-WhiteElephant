@@ -2,21 +2,46 @@
 
 angular.module('holidayJs2013WhiteElephantApp')
 	.controller('MainCtrl', ['$scope', function ($scope) {
-		// TODO : Add a list of steps to an object
-		// STEPS
-		/*
-			1. Enable Your Camera
-			2. Take a profile picture
-			3. Take a picture of your present
-			4. Enter your Name
-		*/
+		// Use this to track which step the user is on. This is used to determine the message above the status bar
+		$scope.currentStep = 0;
 
-		// TODO : capture the images and store them into firebase using capture method, Also this should update the Button Text
-		// TODO : Add profile picture and picture of present next to web video
+		$scope.user = {};
 
+		$scope.camera = {
+			status: false
+		};
 
-		// TODO : track the progress and update a variable each time a step is complete
-		// TODO : show a message of the step above or below the status bar
+		$scope.signUpSteps = [
+			{
+				description: 'Enable your webcam',
+				browser: {
+					firefox: 'Click the camera just left of the address bar.',
+					chrome: 'Click allow on the pop down bar directly below the address bar',
+					ie: 'Just use another browser! LOL'
+				}
+			},
+			{
+				description: 'Take your profile picture!',
+				btnText: 'Capture Profile Picture'
+			},
+			{
+				description: 'Take a picture of your present!',
+				btnText: 'Capture Picture of my Gift'
+			},
+			{
+				description: 'Enter your name!',
+				btnText: 'I\'m ready'
+			}
+		];
+		$scope.$watch('camera',function(newVal){
+			if(newVal.status === true){
+				$scope.currentStep = 1;
+			} else {
+				$scope.currentStep = 0;
+			}
+		},true);
+
+		$scope.img = null;
 
 		// TODO : OPTIONAL - Update classes and use a responsive design
 
@@ -25,8 +50,19 @@ angular.module('holidayJs2013WhiteElephantApp')
 
 		// TODO : Test on cell phone
 
+		$scope.createUser = function(){
+			// TODO : pass user to firebase and once complete we can redirect to game-room!
+			console.log('You Wish!');
+		};
+
 		$scope.capturePicture = function(img){
-			$scope.img = img;
-		}
+			if(!$scope.user.profilePicture){
+				$scope.user.profilePicture = img;
+				$scope.currentStep++;
+			} else if (!$scope.user.presentPicture){
+				$scope.user.presentPicture = img;
+				$scope.currentStep++;
+			}
+		};
 
 	}]);
