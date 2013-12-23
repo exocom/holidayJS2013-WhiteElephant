@@ -12,18 +12,33 @@
 	</div>
 </div>
 <div class="container">
-	<h1 class="text-center">{{signUpSteps[currentStep].description}}</h1>
-	<progress percent="(currentStep / signUpSteps.length) * 100" class="progress-danger progress-striped active"></progress>
+	<div class="alert alert-info text-center">{{'Step ' + (currentStep + 1) + ': ' + signUpSteps[currentStep].description}}</div>
+	<progress percent="progress" class="progress-striped active" animate="true"></progress>
 	<div class="row">
-		<div class="col-xs-3 text-center">
+		<div class="col-xs-6 col-md-3 text-center">
 			<img ng-if="!user.profilePicture" src="/images/profile.png" class="img-responsive" alt="You need a profile picture">
 			<img ng-if="user.profilePicture" ng-src="{{user.profilePicture}}" class="img-responsive" alt="Profile Picture">
 			<p>Your Profile Picture</p>
 		</div>
-		<div class="col-xs-6">
-			<div ng-if="currentStep !== 3">
-				<ng-camera type="photo" is-on="camera.status" capture-message="signUpSteps[currentStep].btnText" capture="capturePicture(picture)"></ng-camera>
-			</div>
+		<div class="col-xs-6 visible-xs visible-sm text-center">
+			<img ng-if="!user.presentPicture" src="/images/present.png" class="img-responsive" alt="You need a profile picture">
+			<img ng-if="user.presentPicture" ng-src="{{user.presentPicture}}" class="img-responsive" alt="Present Picture">
+			<p>Your Gift</p>
+		</div>
+		<div class="col-xs-12 col-md-6">
+			<tabset ng-if="currentStep !== 3" type="'pills'">
+				<tab heading="USB Webcam" active="camera.isWebcam">
+					<br>
+					<div>
+						<ng-camera type="photo" is-on="camera.status" capture-message="signUpSteps[currentStep].btnText" capture="capturePicture(picture)"></ng-camera>
+						<p ng-if="!camera.status" class="text-center"><i ng-if="!cameraOn" class="fa fa-camera" style="font-size: 300px;"></i></p>
+					</div>
+				</tab>
+				<tab heading="Cell Phone / Tablet" active="camera.isMobile" disabled="camera.status">
+					<br>
+					<input type="file" accept="image/*" capture="camera" />
+				</tab>
+			</tabset>
 			<form name="userForm" ng-if="currentStep === 3">
 				<div class="form-group">
 					<label for="name">User Name</label>
@@ -34,7 +49,7 @@
 				</div>
 			</form>
 		</div>
-		<div class="col-xs-3 text-center">
+		<div class="hidden-sm hidden-xs col-xs-6 col-md-3 text-center">
 			<img ng-if="!user.presentPicture" src="/images/present.png" class="img-responsive" alt="You need a profile picture">
 			<img ng-if="user.presentPicture" ng-src="{{user.presentPicture}}" class="img-responsive" alt="Present Picture">
 			<p>Your Gift</p>

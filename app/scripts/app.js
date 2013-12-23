@@ -23,11 +23,11 @@ angular.module('holidayJs2013WhiteElephantApp', [
 		'ngResource',
 		'ngSanitize',
 		'ngRoute',
-		'ngAnimate',
 		'firebase',
 		'omr.directives',
 		'ui.bootstrap.transition',
-		'ui.bootstrap.progressbar'
+		'ui.bootstrap.progressbar',
+		'ui.bootstrap.tabs'
 	])
 	.config(['$routeProvider', function ($routeProvider) {
 		$routeProvider
