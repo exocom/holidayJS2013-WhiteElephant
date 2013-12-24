@@ -11,7 +11,7 @@
     "angular-cookies": "~1.2.6",
     "angular-sanitize": "~1.2.6",
     "angular-route": "~1.2.6",
-    "angular-camera": "https://github.com/exocom/angular-camera.git#70baa749f735090ae4ba5592e27a7b1384fc98aa",
+    "angular-camera": "https://github.com/exocom/angular-camera.git#ef349f2f1810b3fccd0ff0a8a88d2c38c9c6adb2",
     "angular-animate": "~1.2.6",
     "bootstrap": "https://github.com/angular-ui/bootstrap.git#d7c69d462f69d26366c27d73e6918d22b2335201",
     "font-awesome": "~4.0.3",
