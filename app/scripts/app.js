@@ -31,13 +31,39 @@ angular.module('holidayJs2013WhiteElephantApp', [
 			})
 			.when('/game-room', {
 				templateUrl: 'views/game-room.html',
-				controller: 'GameRoomCtrl'
+				controller: 'GameRoomCtrl',
+				resolve: {
+					userId: function($cookies,$q){
+						var deferred = $q.defer();
+						if($cookies.userId){
+							$q.resolve($cookies.userId);
+						} else {
+							$q.reject('No User Id Set');
+						}
+						return deferred;
+					}
+				}
 			})
 			.when('/lobby', {
 				templateUrl: 'views/lobby.html',
-				controller: 'LobbyCtrl'
+				controller: 'LobbyCtrl',
+				resolve: {
+					// TODO : resolve if the user is in this specific game? Or should hitting this add them to the game?
+					// TODO : IF NOT IN THIS GAME BUT IS A USER then add to game and continue?
+					// NOTE : I am storing a cookie of the game you belong to so how about if they are not in that game and don't have cookie then we can fetch that game on the lobby page and say did you want to join this game?
+					userId: function($cookies,$q){
+						var deferred = $q.defer();
+						if($cookies.userId){
+							deferred.resolve($cookies.userId);
+						} else {
+							deferred.reject('No User Id Set');
+						}
+						return deferred.promise;
+					}
+				}
 			})
 			.otherwise({
 				redirectTo: '/'
 			});
-	}]);
+	}])
+	.constant('FBURL', 'https://white-elephant.firebaseio.com');

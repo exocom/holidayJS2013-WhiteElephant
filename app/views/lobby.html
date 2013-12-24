@@ -1,4 +1,49 @@
-<p>This is the lobby view.</p>
-<button ng-click="add()">Add Present</button>
-<pre ng-bind="presents|json"> </pre>
+<div class="container">
+	<div class="row">
+		<div class="col-xs-12">
+			<div class="row">
+				<div class="col-xs-3">
+					<img ng-src="{{user.profilePicture}}" alt="Profile Picture">
+				</div>
+				<div class="col-xs-6">
+					<h1>Lobby</h1>
+					<div class="text-center">
+						<button type="button" class="btn btn-lg btn-success" ng-click="createGame()">Start your own game!</button>
+					</div>
+				</div>
+				<div class="col-xs-3">
+					<img ng-src="{{user.presentPicture}}" alt="Present Picture">
+				</div>
+			</div>
+		</div>
+		<div class="col-xs-12">
+			<table class="table table-stripped">
+				<thead>
+				<tr>
+					<td>Game Id</td>
+					<td>Number Of Players</td>
+					<td>Status</td>
+					<td></td>
+				</tr>
+				</thead>
+				<tbody>
+				<tr ng-repeat="game in games" ng-class="{'warning':game.status===1,'success':game.status===2,'danger':game.status===3}">
+					<td>{{game.hostId}}</td>
+					<td>{{game.usersId.length}}</td>
+					<td>
+						<span ng-switch="game.status">
+							<span ng-switch-when="1">Waiting For Players</span>
+							<span ng-switch-when="2">In Progress</span>
+							<span ng-switch-when="3">Completed</span>
+						</span>
+					</td>
+					<td>
+						<button type="button" ng-click="join(game)" class="btn" ng-class="{'btn-success':$odd,'btn-danger':$even}">Join</button>
+					</td>
+				</tr>
+				</tbody>
+			</table>
+		</div>
+	</div>
+</div>
 
