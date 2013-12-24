@@ -14,7 +14,8 @@
     "angular-camera": "https://github.com/exocom/angular-camera.git#70baa749f735090ae4ba5592e27a7b1384fc98aa",
     "angular-animate": "~1.2.6",
     "bootstrap": "https://github.com/angular-ui/bootstrap.git#d7c69d462f69d26366c27d73e6918d22b2335201",
-    "font-awesome": "~4.0.3"
+    "font-awesome": "~4.0.3",
+    "ng-file-upload": "~1.1.11"
   },
   "devDependencies": {
     "angular-mocks": "~1.2.6",

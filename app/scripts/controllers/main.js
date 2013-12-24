@@ -2,16 +2,30 @@
 
 angular.module('holidayJs2013WhiteElephantApp')
 	.controller('MainCtrl', ['$scope', function ($scope) {
+		// TODO : create a image upload directive with resize similar to camera directive
+		// TODO : put data into firebase
+
 		// Use this to track which step the user is on. This is used to determine the message above the status bar
 		$scope.currentStep = 0;
 
-		$scope.user = {};
-
+		// This is the state object for the camera
+		// Some Android Phones support getUserMedia with firefox and android, however no IOS device supports getUserMedia
 		$scope.camera = {
 			status: false,
-			isWebCam: true,
-			isMobile: false
+			useGetUserMedia: true,
+			useFileInput: false,
+			removeGetUserMedia: false,
 		};
+
+		// Quick test to see if browser has support for getUserMedia!
+		navigator.getUserMedia = navigator.getUserMedia || navigator.webkitGetUserMedia || navigator.mozGetUserMedia || navigator.msGetUserMedia;
+		if(typeof navigator.getUserMedia != 'function'){ // The browser does not support getUserMedia
+				$scope.camera.useFileInput = true;
+			  $scope.camera.useGetUserMedia = false;
+			  $scoep.camera.removeGetUserMedia = true;
+		}
+
+		$scope.user = {};
 
 		$scope.progress = {
 			type:'success',
@@ -20,7 +34,7 @@ angular.module('holidayJs2013WhiteElephantApp')
 
 		$scope.signUpSteps = [
 			{
-				description: 'Enable your webcam or choose cell phone',
+				description: 'Enable your streaming camera (webcam & android 2.3+) or use camera/file upload',
 				browser: {
 					firefox: 'Click the camera just left of the address bar.',
 					chrome: 'Click allow on the pop down bar directly below the address bar',
@@ -34,12 +48,12 @@ angular.module('holidayJs2013WhiteElephantApp')
 				isComplete: false
 			},
 			{
-				description: 'Take a picture of your present!',
+				description: 'Take a picture of your gift!',
 				btnText: 'Capture Picture of my Gift',
 				isComplete: false
 			},
 			{
-				description: 'Enter your name!',
+				description: 'Enter your user name!',
 				btnText: 'I\'m ready',
 				isComplete: false
 			}
@@ -60,6 +74,19 @@ angular.module('holidayJs2013WhiteElephantApp')
 			$scope.progress.value = (completedSteps / numberOfSteps) * 100;
 		};
 
+		// TODO Move this into the file uploader directive!
+		$scope.onFileSelect = function(files){
+			angular.forEach(files, function (file) {
+				var reader = new FileReader();
+				reader.onload = function (event) {
+                  $scope.$apply(function(){
+                      $scope.capturePicture(event.target.result);
+                  });
+				};
+				reader.readAsDataURL(file);
+			});
+		};
+
 		$scope.$watch('camera',function(newVal){
 			if(newVal.status === true || newVal.isMobile === true){
 				$scope.signUpSteps[0].isComplete = true;
@@ -78,18 +105,9 @@ angular.module('holidayJs2013WhiteElephantApp')
 			$scope.updateProgress();
 		},true);
 
-		$scope.img = null;
-
-		// TODO : OPTIONAL - Update classes and use a responsive design
-
-		// TODO : OPTIONAL - Consider removing the name, you could simply interact by having a profile and present.
-		// TODO : OPTIONAL - Could add logic to not have a profile picture
-
-		// TODO : Test on cell phone
-
 		$scope.createUser = function(){
 			// TODO : pass user to firebase and once complete we can redirect to game-room!
-			console.log('You Wish!');
+			alert('Coming Soon!');
 		};
 
 		$scope.capturePicture = function(img){
@@ -102,5 +120,4 @@ angular.module('holidayJs2013WhiteElephantApp')
 			}
 			$scope.updateProgress();
 		};
-
 	}]);
