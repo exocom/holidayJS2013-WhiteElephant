@@ -29,19 +29,40 @@ angular.module('holidayJs2013WhiteElephantApp', [
 				templateUrl: 'views/main.html',
 				controller: 'MainCtrl'
 			})
-			.when('/game-room', {
+			.when('/game-room/:id', {
 				templateUrl: 'views/game-room.html',
 				controller: 'GameRoomCtrl',
 				resolve: {
-					userId: function($cookies,$q){
-						var deferred = $q.defer();
-						if($cookies.userId){
-							$q.resolve($cookies.userId);
-						} else {
-							$q.reject('No User Id Set');
+					user: [
+						'$cookies',
+						'$q',
+						'$firebase',
+						'FBURL',
+						function ($cookies, $q, $firebase, FBURL) {
+							if ($cookies.userId) {
+								return $firebase(new Firebase(FBURL + '/users/' + $cookies.userId));
+							} else {
+								var deferred = $q.defer();
+								deferred.reject('You have not yet signed up!');
+								return deferred.promise;
+							}
 						}
-						return deferred;
-					}
+					],
+					game: [
+						'$cookies',
+						'$q',
+						'$firebase',
+						'FBURL',
+						function ($cookies, $q, $firebase, FBURL) {
+							if ($cookies.gameId) {
+								return $firebase(new Firebase(FBURL + '/games/' + $cookies.gameId));
+							} else {
+								var deferred = $q.defer();
+								deferred.reject('You have not yet signed up!');
+								return deferred.promise;
+							}
+						}
+					]
 				}
 			})
 			.when('/lobby', {
@@ -51,15 +72,28 @@ angular.module('holidayJs2013WhiteElephantApp', [
 					// TODO : resolve if the user is in this specific game? Or should hitting this add them to the game?
 					// TODO : IF NOT IN THIS GAME BUT IS A USER then add to game and continue?
 					// NOTE : I am storing a cookie of the game you belong to so how about if they are not in that game and don't have cookie then we can fetch that game on the lobby page and say did you want to join this game?
-					userId: function($cookies,$q){
-						var deferred = $q.defer();
-						if($cookies.userId){
-							deferred.resolve($cookies.userId);
-						} else {
-							deferred.reject('No User Id Set');
+					user: [
+						'$cookies',
+						'$q',
+						'$firebase',
+						'FBURL',
+						function ($cookies, $q, $firebase, FBURL) {
+							if ($cookies.userId) {
+								return $firebase(new Firebase(FBURL + '/users/' + $cookies.userId));
+							} else {
+								var deferred = $q.defer();
+								deferred.reject('You have not yet signed up!');
+								return deferred.promise;
+							}
 						}
-						return deferred.promise;
-					}
+					],
+					games: [
+						'$firebase',
+						'FBURL',
+						function ($firebase, FBURL) {
+							return $firebase(new Firebase(FBURL + '/games').limit(20));
+						}
+					]
 				}
 			})
 			.otherwise({

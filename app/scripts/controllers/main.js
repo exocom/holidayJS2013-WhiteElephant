@@ -6,7 +6,18 @@ angular.module('holidayJs2013WhiteElephantApp')
 		'FBURL',
 		'$location',
 		'$cookies',
-		function ($scope,FBURL,$location,$cookies) {
+		'$routeParams',
+		'$firebase',
+		function ($scope, FBURL, $location, $cookies, $routeParams, $firebase) {
+			// CHECK TO SEE IF THE USER IS REGISTERED OR IS IN A GAME!
+			if($cookies.userId && $cookies.gameId){
+				$location.path('game-room/' + $cookies.gameId);
+				$location.replace();
+			} else if($cookies.userId){
+				$location.path('lobby/');
+				$location.replace();
+			}
+
 			// TODO : create a image upload directive with resize similar to camera directive
 			// TODO : put data into firebase
 
@@ -19,7 +30,7 @@ angular.module('holidayJs2013WhiteElephantApp')
 				status: false,
 				useGetUserMedia: true,
 				useFileInput: false,
-				removeGetUserMedia: false,
+				removeGetUserMedia: false
 			};
 
 			// Quick test to see if browser has support for getUserMedia!
@@ -110,15 +121,60 @@ angular.module('holidayJs2013WhiteElephantApp')
 				$scope.updateProgress();
 			}, true);
 
-			$scope.createUser = function () {
+
+			$scope.continue = function () {
+				if ($routeParams.join) {
+					// Manual way
+					/*
+					 var game = new Firebase(FBURL + '/games/' + $routeParams.join);
+					 game.once('value',function(data){
+					 });
+					 */
+
+					// AngularFire way
+					var game = $firebase(new Firebase(FBURL + '/games/' + $routeParams.join));
+
+					$scope.game.$on('loaded', function () {
+						if ($scope.game.host && $scope.game.status && $scope.game.status === 1) {
+							var countPlayers = 0;
+							angular.forEach($scope.game.players, function () {
+								countPlayers++;
+							});
+							if (countPlayers < 6) {
+								$scope.createUser({gameId: $routeParams.join});
+							} else {
+								$scope.createUser({error: 'You tried to join a game is already full! Continuing to lobby'});
+							}
+						} else {
+							$scope.createUser({error: 'You tried to join an invalid game or a game that is already in progress!'});
+						}
+					});
+				}
+			};
+
+			$scope.createUser = function (options) {
+				options = options || {};
 				$scope.lock = true;
-				// TODO : pass user to firebase and once complete we can redirect to game-room!
 				var users = new Firebase(FBURL + '/users');
-				var user = users.push($scope.user,function(){
-					$scope.$apply(function(){
+				var user = users.push($scope.user, function () {
+					$scope.$apply(function () {
 						$cookies.userId = user.name();
-						$location.path('lobby');
-						$location.replace();
+						if (options.error) {
+							alert(options.error);
+						}
+          // TODO : TEST THIS! I sent an invite and the user did not get added!
+						if (options.gameId) {
+							$cookies.gameId = option.gameId;
+							var player = {};
+							player[user.name()] = true;
+							$scope.game.players.$add(player, function () {
+								$location.path('game-room/' + option.gameId);
+								$location.replace();
+							});
+						} else {
+							$location.path('lobby');
+							$location.replace();
+						}
 					});
 				});
 			};
