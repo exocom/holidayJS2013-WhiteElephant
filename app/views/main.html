@@ -3,7 +3,8 @@
 		<div class="row">
 			<div class="col-xs-9">
 				<h1>White Elephant</h1>
-				<p>Give presents anonymously with up 6 people!  Enjoy the holidays with realtime gift giving!</p>
+
+				<p>Give presents anonymously with up 6 people! Enjoy the holidays with realtime gift giving!</p>
 			</div>
 			<div class="col-xs-3">
 				<img src="/images/elephant.png" class="img-responsive" alt="White Elephant">
@@ -17,43 +18,61 @@
 	<div class="row">
 		<div class="col-xs-6 col-md-3 text-center">
 			<img ng-if="!user.profilePicture" src="/images/profile.png" class="img-responsive" alt="You need a profile picture">
-			<img ng-if="user.profilePicture" ng-src="{{user.profilePicture}}" class="img-responsive" alt="Profile Picture">
+			<canvas-combine-img class="img-responsive" ng-if="user.profilePicture" bg="{{user.profilePicture}}" fg="/images/profile-green.png"></canvas-combine-img>
 			<p>Your Profile Picture</p>
 		</div>
 		<div class="col-xs-6 visible-xs visible-sm text-center">
 			<img ng-if="!user.presentPicture" src="/images/present.png" class="img-responsive" alt="You need a profile picture">
 			<img ng-if="user.presentPicture" ng-src="{{user.presentPicture}}" class="img-responsive" alt="Present Picture">
+
 			<p>Your Gift</p>
 		</div>
 		<div class="col-xs-12 col-md-6">
-			<tabset ng-if="currentStep !== 3" type="'pills'">
-				<tab heading="Streaming Camera (webcam & android 2.3+)" active="camera.useGetUserMedia" ng-if="!removeGetUserMedia">
-					<br>
-					<div ng-if="!camera.active" class="alert alert-danger text-center text-center"><strong>Notice:</strong> Not every phone supports streaming from the camera! <br> If you are using an Apple device or you do not see a permission pop after clicking <strong>"Turn Webcam On"</strong> below then you need to use <a ng-click="camera.useFileInput = true">All Others</a></div>
-					<div>
-						<ng-camera type="photo" is-on="camera.status" keep-aspect="true" width="280" height="280" capture-message="signUpSteps[currentStep].btnText" capture="capturePicture(picture)"></ng-camera>
-						<p ng-if="!camera.status" class="text-center"><img src="/images/camera.png" class="img-responsive" alt="Camera" style="margin: 0 auto;"></p>
+			<form name="userForm">
+				<tabset ng-if="currentStep !== 3" type="'pills'">
+					<tab heading="Streaming Camera (webcam & android 2.3+)" active="camera.useGetUserMedia" ng-if="!removeGetUserMedia">
+						<br>
+
+						<div ng-if="!camera.active" class="alert alert-danger text-center text-center">
+							<strong>Notice:</strong> Not every phone supports streaming from the camera!
+							<br> If you are using an Apple device or you do not see a permission popup after clicking
+							<strong>"Turn Webcam On"</strong> below then you need to use
+							<a ng-click="camera.useFileInput = true">All Others</a></div>
+						<div>
+							<ng-camera type="photo" is-on="camera.status" keep-aspect="true" width="camera.dimensions.width" height="camera.dimensions.height" capture-message="signUpSteps[currentStep].btnText" capture="capturePicture(picture)"></ng-camera>
+							<p ng-if="!camera.status" class="text-center">
+								<img src="/images/camera.png" class="img-responsive" alt="Camera" style="margin: 0 auto;">
+							</p>
+						</div>
+					</tab>
+					<tab heading="Camera & File Upload (All others)" active="camera.useFileInput" disabled="camera.active">
+						<br>
+
+						<p class="text-center" ng-hide="camera.fileUploading">
+
+							<input type="file" class="btn btn-success" accept="image/*" capture="camera" ng-file-select="onFileSelect($files)"/>
+
+						<h2>{{signUpSteps[currentStep].btnText}}</h2>
+						</p>
+						<p ng-show="camera.fileUploading">Processing your image...</p>
+						<img src="/images/camera-and-folder.png" class="img-responsive" alt="Camera" style="margin: 0 auto;">
+					</tab>
+				</tabset>
+				<div ng-if="currentStep === 3">
+					<div class="form-group">
+						<label for="name">User Name</label>
+						<input type="text" id="name" class="form-control" placeholder="Enter Your User Name" ng-model="user.name" required>
 					</div>
-				</tab>
-				<tab heading="Camera & File Upload (All others)" active="camera.useFileInput" disabled="camera.active">
-					<br>
-					<p class="text-center"><input type="file" class="btn btn-success" accept="image/*" capture="camera" ng-file-select="onFileSelect($files)" /></p>
-					<img src="/images/camera-and-folder.png" class="img-responsive" alt="Camera" style="margin: 0 auto;">
-				</tab>
-			</tabset>
-			<form name="userForm" ng-if="currentStep === 3">
-				<div class="form-group">
-					<label for="name">User Name</label>
-					<input type="text" id="name" class="form-control" placeholder="Enter Your User Name" ng-model="user.name" required>
-				</div>
-				<div class="text-center">
-					<button type="button" class="btn btn-success" ng-click="createUser()" ng-disabled="userForm.$invalid || lock">{{signUpSteps[currentStep].btnText}}</button>
+					<div class="text-center">
+						<button type="button" class="btn btn-success" ng-click="createUser()" ng-disabled="userForm.$invalid || lock">{{signUpSteps[currentStep].btnText}}</button>
+					</div>
 				</div>
 			</form>
 		</div>
 		<div class="hidden-sm hidden-xs col-xs-6 col-md-3 text-center">
 			<img ng-if="!user.presentPicture" src="/images/present.png" class="img-responsive" alt="You need a profile picture">
 			<img ng-if="user.presentPicture" ng-src="{{user.presentPicture}}" class="img-responsive" alt="Present Picture">
+
 			<p>Your Gift</p>
 		</div>
 	</div>

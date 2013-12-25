@@ -30,7 +30,12 @@ angular.module('holidayJs2013WhiteElephantApp')
 				status: false,
 				useGetUserMedia: true,
 				useFileInput: false,
-				removeGetUserMedia: false
+				removeGetUserMedia: false,
+				dimensions: {
+					height: 280,
+					width: 280
+				},
+				fileUploading: false
 			};
 
 			// Quick test to see if browser has support for getUserMedia!
@@ -92,11 +97,23 @@ angular.module('holidayJs2013WhiteElephantApp')
 
 			// TODO Move this into the file uploader directive!
 			$scope.onFileSelect = function (files) {
+				$scope.camera.fileUploading = true;
+				// Read the files from the file input, this will give us the raw base64 for the image
 				angular.forEach(files, function (file) {
 					var reader = new FileReader();
 					reader.onload = function (event) {
 						$scope.$apply(function () {
-							$scope.capturePicture(event.target.result);
+							// Now that we have the base64, we want to create an html image element to pass to our resize function
+							var img = new Image();
+							img.onload = onload;
+							img.src = event.target.result;
+							function onload(){
+								// call the resize function and pass the image element. Not passing base64 because canvas doesn't render it
+
+								// TODO : Make this and the next function built into a directive that can be placed on a <input type="file">
+								// NOTE : DOM manipulation was done to save time!  The resize is required in order to have small images in firebase, don't do this in production MAKE a directive!
+								resizeFromFile(img);
+							}
 						});
 					};
 					reader.readAsDataURL(file);
@@ -104,7 +121,7 @@ angular.module('holidayJs2013WhiteElephantApp')
 			};
 
 			$scope.$watch('camera', function (newVal) {
-				if (newVal.status === true || newVal.isMobile === true) {
+				if (newVal.status === true || newVal.useFileInput === true) {
 					$scope.signUpSteps[0].isComplete = true;
 				} else {
 					$scope.signUpSteps[0].isComplete = false;
@@ -176,6 +193,35 @@ angular.module('holidayJs2013WhiteElephantApp')
 							$location.replace();
 						}
 					});
+				});
+			};
+
+			function resizeFromFile(img){
+				// TODO : Make this and the previous function built into a directive that can be placed on a <input type="file">
+				// NOTE : DOM manipulation was done to save time!  The resize is required in order to have small images in firebase, don't do this in production MAKE a directive!
+
+				var canvas = angular.element('<canvas style="display: none;"></canvas>');
+				var body = angular.element('body');
+				var w = $scope.camera.dimensions.width;
+				var h = $scope.camera.dimensions.width;
+
+				body.append(canvas);
+
+				canvas.css({width: w, height: h});
+				canvas[0].width = w;
+				canvas[0].height = h;
+
+				var context = canvas[0].getContext('2d');
+				context.drawImage(img, 0, 0, w, h);
+
+				var format = 'image/jpeg';
+				var imgData = canvas[0].toDataURL(format);
+				canvas.remove();
+
+				$scope.$apply(function(){
+					angular.element('[name="userForm"]')[0].reset();
+					$scope.camera.fileUploading = false;
+					$scope.capturePicture(imgData);
 				});
 			};
 
