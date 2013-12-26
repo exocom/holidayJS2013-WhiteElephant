@@ -96,6 +96,10 @@ angular.module('holidayJs2013WhiteElephantApp', [
 					]
 				}
 			})
+            .when('/error', {
+              templateUrl: 'views/error.html',
+              controller: 'ErrorCtrl'
+            })
 			.otherwise({
 				redirectTo: '/'
 			});

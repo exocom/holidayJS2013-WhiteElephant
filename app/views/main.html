@@ -29,7 +29,7 @@
 		</div>
 		<div class="col-xs-12 col-md-6">
 			<form name="userForm">
-				<tabset ng-if="currentStep !== 3" type="'pills'">
+				<tabset ng-show="currentStep !== 3" type="'pills'">
 					<tab heading="Streaming Camera (webcam & android 2.3+)" active="camera.useGetUserMedia" ng-if="!removeGetUserMedia">
 						<br>
 
@@ -64,7 +64,7 @@
 						<input type="text" id="name" class="form-control" placeholder="Enter Your User Name" ng-model="user.name" required>
 					</div>
 					<div class="text-center">
-						<button type="button" class="btn btn-success" ng-click="createUser()" ng-disabled="userForm.$invalid || lock">{{signUpSteps[currentStep].btnText}}</button>
+						<button type="button" class="btn btn-success" ng-click="continue()" ng-disabled="userForm.$invalid || lock">{{signUpSteps[currentStep].btnText}}</button>
 					</div>
 				</div>
 			</form>

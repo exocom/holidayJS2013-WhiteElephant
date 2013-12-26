@@ -15,9 +15,12 @@ angular.module('holidayJs2013WhiteElephantApp')
 			$scope.user = user;
 			$scope.user.id = $cookies.userId;
 
-			$scope.game = game;
+			$scope.host = window.location.host;
 
-			$scope.$watch('game.players',function(newVal){
+			$scope.game = game;
+			$scope.game.id = $cookies.gameId;
+
+			$scope.$watch('game.players',function(){
 				var playerCount = 0;
 				angular.forEach($scope.game.players,function(v,k){
 					if(!$scope.users[k]){

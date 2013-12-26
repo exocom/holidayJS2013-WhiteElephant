@@ -11,6 +11,10 @@
 			</div>
 		</div>
 	</div>
+	<div ng-if="game.status === 1">
+		<h1>Invite your friends and family to join this game!</h1>
+		<h2><a href="/#/?join={{game.id}}">http://{{host}}/?join={{game.id}}</a></h2>
+	</div>
 	<div class="row">
 		<div class="col-xs-6 col-md-3 spacing-top" ng-repeat-start="(playerId,player) in game.players">
 			<canvas-combine-img bg="{{users[playerId].profilePicture}}" fg="{{(activePlayer === playerId) ? '/images/profile-green.png' : '/images/profile-red.png'}}"></canvas-combine-img>

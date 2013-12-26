@@ -3,18 +3,19 @@
 angular.module('holidayJs2013WhiteElephantApp')
 	.controller('MainCtrl', [
 		'$scope',
-		'FBURL',
 		'$location',
 		'$cookies',
 		'$routeParams',
-		'$firebase',
-		function ($scope, FBURL, $location, $cookies, $routeParams, $firebase) {
+		'FBURL',
+		function ($scope, $location, $cookies, $routeParams, FBURL) {
 			// CHECK TO SEE IF THE USER IS REGISTERED OR IS IN A GAME!
 			if($cookies.userId && $cookies.gameId){
 				$location.path('game-room/' + $cookies.gameId);
+				$location.search({});
 				$location.replace();
 			} else if($cookies.userId){
 				$location.path('lobby/');
+				$location.search({});
 				$location.replace();
 			}
 
@@ -149,16 +150,16 @@ angular.module('holidayJs2013WhiteElephantApp')
 					 */
 
 					// AngularFire way
-					var game = $firebase(new Firebase(FBURL + '/games/' + $routeParams.join));
-
-					$scope.game.$on('loaded', function () {
-						if ($scope.game.host && $scope.game.status && $scope.game.status === 1) {
+					var gameRef = new Firebase(FBURL+'/games/'+$routeParams.join);
+					gameRef.once('value',function(snapshot){
+						var game = snapshot.val();
+						if (game.host && game.status && game.status === 1) {
 							var countPlayers = 0;
-							angular.forEach($scope.game.players, function () {
+							angular.forEach(game.players, function () {
 								countPlayers++;
 							});
 							if (countPlayers < 6) {
-								$scope.createUser({gameId: $routeParams.join});
+								$scope.createUser({gameId: $routeParams.join,gameRef:gameRef});
 							} else {
 								$scope.createUser({error: 'You tried to join a game is already full! Continuing to lobby'});
 							}
@@ -166,6 +167,8 @@ angular.module('holidayJs2013WhiteElephantApp')
 							$scope.createUser({error: 'You tried to join an invalid game or a game that is already in progress!'});
 						}
 					});
+				} else {
+					$scope.createUser();
 				}
 			};
 
@@ -181,12 +184,13 @@ angular.module('holidayJs2013WhiteElephantApp')
 						}
           // TODO : TEST THIS! I sent an invite and the user did not get added!
 						if (options.gameId) {
-							$cookies.gameId = option.gameId;
-							var player = {};
-							player[user.name()] = true;
-							$scope.game.players.$add(player, function () {
-								$location.path('game-room/' + option.gameId);
-								$location.replace();
+							$cookies.gameId = options.gameId;
+							options.gameRef.child('/players/'+user.name()).set(true,function () {
+								$scope.$apply(function(){
+									$location.path('game-room/' + options.gameId);
+									$location.search({});
+									$location.replace();
+								});
 							});
 						} else {
 							$location.path('lobby');
