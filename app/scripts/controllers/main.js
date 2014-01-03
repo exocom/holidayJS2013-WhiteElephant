@@ -44,7 +44,7 @@ angular.module('holidayJs2013WhiteElephantApp')
 			if (typeof navigator.getUserMedia != 'function') { // The browser does not support getUserMedia
 				$scope.camera.useFileInput = true;
 				$scope.camera.useGetUserMedia = false;
-				$scoep.camera.removeGetUserMedia = true;
+				$scope.camera.removeGetUserMedia = true;
 			}
 
 			$scope.user = {};
