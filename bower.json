@@ -13,7 +13,7 @@
     "angular-route": "~1.2.6",
     "angular-camera": "https://github.com/exocom/angular-camera.git#ef349f2f1810b3fccd0ff0a8a88d2c38c9c6adb2",
     "angular-animate": "~1.2.6",
-    "bootstrap": "https://github.com/angular-ui/bootstrap.git#d7c69d462f69d26366c27d73e6918d22b2335201",
+    "angular-bootstrap": "~0.9.0",
     "font-awesome": "~4.0.3",
     "ng-file-upload": "~1.1.11"
   },

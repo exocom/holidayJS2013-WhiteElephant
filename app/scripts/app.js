@@ -18,9 +18,7 @@ angular.module('holidayJs2013WhiteElephantApp', [
 		'ngRoute',
 		'firebase',
 		'omr.directives',
-		'ui.bootstrap.transition',
-		'ui.bootstrap.progressbar',
-		'ui.bootstrap.tabs',
+		'ui.bootstrap',
 		'angularFileUpload'
 	])
 	.config(['$routeProvider', function ($routeProvider) {
